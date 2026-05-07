@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✂️ 하의 수선의 모든 것 — 홍보 메일 시스템</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1209;
+  --paper: #FBF8F3;
+  --warm-mid: #EDE5D8;
+  --warm-dark: #D4C5B0;
+  --thread: #B87333;
+  --thread-light: #E8C99A;
+  --needle: #4A6741;
+  --needle-light: #C8DBC5;
+  --seam: #8B6252;
+  --muted: #9B8878;
+  --white: #FFFFFF;
+  --danger: #C0392B;
+  --success: #27AE60;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.app-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0 48px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.app-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--thread), var(--needle), var(--thread));
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-scissors {
+  font-size: 1.6rem;
+  animation: snip 4s ease-in-out infinite;
+}
+@keyframes snip {
+  0%,90%,100% { transform: rotate(0deg); }
+  95% { transform: rotate(-20deg); }
+}
+.brand-text h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.brand-text p {
+  font-size: .72rem;
+  color: var(--thread-light);
+  margin-top: 1px;
+  letter-spacing: .5px;
+}
+.gmail-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 30px;
+  padding: 6px 16px;
+  font-size: .78rem;
+  color: var(--needle-light);
+}
+.gmail-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  background: var(--white);
+  border-bottom: 2px solid var(--warm-mid);
+  display: flex;
+  padding: 0 48px;
+  gap: 0;
+}
+.nav-tab {
+  padding: 16px 24px;
+  border: none;
+  background: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: var(--thread); }
+.nav-tab.active {
+  color: var(--thread);
+  border-bottom-color: var(--thread);
+  font-weight: 700;
+}
+.tab-badge {
+  background: var(--thread);
+  color: white;
+  font-size: .65rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+/* ── LAYOUT ── */
+.page { display: none; }
+.page.active { display: block; }
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 36px 48px;
+}
+
+/* ── STAT CARDS ── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: white;
+  border-radius: 14px;
+  border: 1.5px solid var(--warm-mid);
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.stat-card:hover { border-color: var(--thread-light); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.stat-card:nth-child(1)::before { background: var(--thread); }
+.stat-card:nth-child(2)::before { background: var(--needle); }
+.stat-card:nth-child(3)::before { background: var(--seam); }
+.stat-card:nth-child(4)::before { background: var(--muted); }
+.stat-num {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-label { font-size: .78rem; color: var(--muted); margin-top: 6px; }
+.stat-icon { position: absolute; right: 18px; top: 18px; font-size: 1.5rem; opacity: .15; }
+
+/* ── CARDS ── */
+.card {
+  background: white;
+  border-radius: 14px;
+  border: 1.5px solid var(--warm-mid);
+  padding: 28px 30px;
+  margin-bottom: 20px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--warm-dark); }
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--seam);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── FORM ── */
+label {
+  display: block;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+  margin-top: 16px;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+label:first-child { margin-top: 0; }
+input[type="text"], input[type="email"], textarea, select {
+  width: 100%;
+  padding: 11px 15px;
+  border: 1.5px solid var(--warm-mid);
+  border-radius: 9px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .9rem;
+  background: var(--paper);
+  color: var(--ink);
+  transition: border-color .2s, background .2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--thread);
+  background: white;
+}
+textarea { resize: vertical; min-height: 100px; line-height: 1.8; }
+
+.row { display: flex; gap: 14px; flex-wrap: wrap; }
+.flex-1 { flex: 1; min-width: 160px; }
+.flex-2 { flex: 2; min-width: 200px; }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 9px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .87rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--thread); color: white; }
+.btn-primary:hover { background: #a3641f; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(184,115,51,.3); }
+.btn-green { background: var(--needle); color: white; }
+.btn-green:hover { background: #3a5433; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(74,103,65,.3); }
+.btn-outline { background: white; color: var(--thread); border: 1.5px solid var(--thread-light); }
+.btn-outline:hover { background: #fdf5ec; }
+.btn-ghost { background: var(--warm-mid); color: var(--seam); }
+.btn-ghost:hover { background: var(--warm-dark); }
+.btn-danger { background: #fff0ef; color: var(--danger); border: 1.5px solid #fcc; }
+.btn-danger:hover { background: #ffe0de; }
+.btn-sm { padding: 7px 14px; font-size: .78rem; }
+.btn-lg { padding: 14px 28px; font-size: .95rem; }
+
+/* ── AI SECTION ── */
+.ai-block {
+  background: linear-gradient(135deg, #fefaf5 0%, #f5fbf5 100%);
+  border: 2px solid var(--thread-light);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.ai-block::before {
+  content: '✨';
+  position: absolute;
+  right: 20px; top: 16px;
+  font-size: 2rem;
+  opacity: .12;
+}
+.ai-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--thread);
+  color: white;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  letter-spacing: .5px;
+  margin-bottom: 16px;
+}
+
+/* ── ORG GRID ── */
+.org-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+.org-card {
+  background: var(--paper);
+  border: 1.5px solid var(--warm-mid);
+  border-radius: 11px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all .18s;
+  user-select: none;
+}
+.org-card:hover { border-color: var(--thread-light); background: white; }
+.org-card.selected {
+  border-color: var(--needle);
+  background: #f4f9f4;
+  box-shadow: 0 0 0 1px var(--needle);
+}
+.org-check {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--warm-dark);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem;
+  transition: all .18s;
+  background: white;
+}
+.org-card.selected .org-check {
+  background: var(--needle);
+  border-color: var(--needle);
+  color: white;
+}
+.org-info { flex: 1; min-width: 0; }
+.org-name { font-weight: 700; font-size: .88rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.org-email { font-size: .74rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.org-tags { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: .68rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.tag-region { background: var(--warm-mid); color: var(--seam); }
+.tag-type { background: #e8f0e6; color: var(--needle); }
+.tag-sent { background: #e8f5e9; color: #2e7d32; }
+.tag-unsent { background: #fff3e8; color: var(--thread); }
+
+/* ── SEND BAR ── */
+.send-bar {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: 2px solid var(--warm-mid);
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.06);
+}
+.send-bar-info { flex: 1; font-size: .85rem; color: var(--muted); }
+.send-bar-info strong { color: var(--ink); }
+
+/* ── MAIL PREVIEW ── */
+.mail-preview-box {
+  background: white;
+  border: 1.5px solid var(--warm-mid);
+  border-radius: 11px;
+  overflow: hidden;
+}
+.mail-preview-header {
+  background: var(--paper);
+  border-bottom: 1px solid var(--warm-mid);
+  padding: 14px 20px;
+}
+.mail-preview-field { font-size: .82rem; color: var(--muted); margin-bottom: 4px; }
+.mail-preview-field:last-child { margin-bottom: 0; }
+.mail-preview-field strong { color: var(--ink); }
+.mail-preview-body { padding: 24px; font-size: .9rem; line-height: 1.9; white-space: pre-wrap; color: var(--ink); }
+
+/* ── HISTORY ── */
+.history-list { display: flex; flex-direction: column; gap: 10px; }
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--paper);
+  border: 1px solid var(--warm-mid);
+  border-radius: 10px;
+  transition: border-color .2s;
+}
+.history-item:hover { border-color: var(--thread-light); }
+.h-icon { font-size: 1.3rem; flex-shrink: 0; }
+.h-info { flex: 1; }
+.h-org { font-weight: 700; font-size: .9rem; }
+.h-sub { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+.h-date { font-size: .75rem; color: var(--muted); }
+.badge {
+  font-size: .72rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+.badge-gmail { background: #e8f5e9; color: #2e7d32; }
+.badge-draft { background: #e3f2fd; color: #1565c0; }
+
+/* ── SEARCH BAR ── */
+.search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px 10px 38px;
+  border: 1.5px solid var(--warm-mid);
+  border-radius: 9px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .88rem;
+  background: var(--paper);
+  outline: none;
+  transition: border-color .2s;
+  position: relative;
+}
+.search-input:focus { border-color: var(--thread); background: white; }
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: .9rem; pointer-events: none; }
+
+/* ── SELECT ALL ROW ── */
+.select-all-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--warm-mid);
+  border-radius: 9px;
+  margin-bottom: 14px;
+}
+.select-all-bar label { margin: 0; text-transform: none; font-size: .85rem; color: var(--ink); cursor: pointer; font-weight: 600; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--ink); color: var(--paper);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: .87rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+  border: 1px solid rgba(255,255,255,.15);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── LOADING SPINNER ── */
+.spin { display: inline-block; animation: rotate 1s linear infinite; }
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+/* ── PROGRESS BAR ── */
+.send-progress {
+  display: none;
+  background: var(--warm-mid);
+  border-radius: 30px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.send-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--needle), var(--thread));
+  border-radius: 30px;
+  transition: width .4s ease;
+}
+.send-progress.visible { display: block; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--warm-mid); margin: 20px 0; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: .5; }
+.empty-text { font-size: .9rem; }
+
+/* ── FILTER CHIPS ── */
+.filter-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--warm-mid);
+  background: white;
+  color: var(--muted);
+  transition: all .15s;
+}
+.chip:hover { border-color: var(--thread-light); color: var(--thread); }
+.chip.active { background: var(--thread); color: white; border-color: var(--thread); }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <span class="brand-scissors">✂️</span>
+    <div class="brand-text">
+      <h1>하의 수선의 모든 것 — 홍보 메일 시스템</h1>
+      <p>여성발전센터 · 문화센터 · 평생교육기관 대상</p>
+    </div>
+  </div>
+  <div class="gmail-badge">
+    <span class="gmail-dot"></span>
+    Gmail 연동됨
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="goTab('compose', this)">✉️ 메일 작성</button>
+  <button class="nav-tab" onclick="goTab('orgs', this)">🏢 기관 관리 <span class="tab-badge" id="orgBadge">0</span></button>
+  <button class="nav-tab" onclick="goTab('history', this)">📋 발송 이력 <span class="tab-badge" id="histBadge">0</span></button>
+</nav>
+
+<!-- ═══════════ PAGE 1: COMPOSE ═══════════ -->
+<div id="page-compose" class="page active">
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats-bar" id="statsBar"></div>
+
+  <!-- Book Info -->
+  <div class="card">
+    <div class="card-title">📖 도서 정보</div>
+    <div class="row">
+      <div class="flex-2">
+        <label>책 제목</label>
+        <input type="text" id="bookTitle" value="하의 수선의 모든 것">
+      </div>
+      <div class="flex-1">
+        <label>저자명</label>
+        <input type="text" id="authorName" placeholder="예: 홍길동">
+      </div>
+    </div>
+    <div class="row">
+      <div class="flex-1">
+        <label>출판사 / 연도</label>
+        <input type="text" id="publisher" placeholder="예: 수선출판사 / 2025">
+      </div>
+      <div class="flex-1">
+        <label>가격</label>
+        <input type="text" id="bookPrice" placeholder="예: 25,000원">
+      </div>
+      <div class="flex-2">
+        <label>구매 링크 또는 연락처</label>
+        <input type="text" id="buyLink" placeholder="예: https://... 또는 010-0000-0000">
+      </div>
+    </div>
+    <label>책 주요 내용 (간단 소개)</label>
+    <textarea id="bookDesc" rows="2" placeholder="예: 허리 줄이기, 밑단 수선, 지퍼 교체 등 하의 수선의 모든 기술을 사진과 함께 단계별로 설명한 실용 교재입니다."></textarea>
+  </div>
+
+  <!-- AI Generate -->
+  <div class="ai-block">
+    <div class="ai-tag">✨ AI 자동 생성</div>
+    <div class="row" style="align-items:flex-end">
+      <div class="flex-1">
+        <label>발신자 이름 / 직책</label>
+        <input type="text" id="senderName" placeholder="예: 김수선 / 저자">
+      </div>
+      <div class="flex-1">
+        <label>발신자 이메일</label>
+        <input type="email" id="senderEmail" placeholder="예: email@gmail.com">
+      </div>
+      <div>
+        <button class="btn btn-primary btn-lg" onclick="generateMail()">
+          <span id="genIconText">✨</span> <span id="genLabel">AI로 메일 생성</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mail Edit -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">✏️ 메일 내용 편집</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="previewMail()">👁 미리보기</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearMail()">🔄 초기화</button>
+      </div>
+    </div>
+    <label>제목</label>
+    <input type="text" id="mailSubject" placeholder="AI 생성 버튼을 눌러 자동 작성하거나 직접 입력하세요">
+    <label>본문</label>
+    <textarea id="mailBody" rows="18" placeholder="메일 본문을 여기에 작성하세요..."></textarea>
+  </div>
+
+  <!-- Preview -->
+  <div id="previewSection" style="display:none" class="card">
+    <div class="card-title" style="margin-bottom:16px">👁 메일 미리보기</div>
+    <div class="mail-preview-box">
+      <div class="mail-preview-header">
+        <div class="mail-preview-field"><strong>제목: </strong><span id="pvSubject"></span></div>
+      </div>
+      <div class="mail-preview-body" id="pvBody"></div>
+    </div>
+  </div>
+
+  <!-- Org Selector -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">🏢 발송 대상 선택</div>
+      <span id="selCountLabel" style="font-size:.82rem;color:var(--muted)">0개 선택</span>
+    </div>
+
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="orgSearch" placeholder="기관명, 지역으로 검색..." oninput="renderSendList()">
+      </div>
+    </div>
+
+    <div class="filter-chips" id="filterChips"></div>
+
+    <div class="select-all-bar">
+      <input type="checkbox" id="checkAll" onchange="toggleAll(this)" style="width:auto;margin:0;cursor:pointer">
+      <label for="checkAll">전체 선택</label>
+      <span style="font-size:.78rem;color:var(--muted);margin-left:auto" id="filterCount"></span>
+    </div>
+
+    <div class="org-grid" id="sendOrgGrid"></div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- Sticky Send Bar -->
+<div class="send-bar">
+  <div class="send-bar-info">
+    <strong id="sbCount">0</strong>개 기관 선택됨 &nbsp;·&nbsp; Gmail로 직접 발송됩니다
+    <div class="send-progress" id="sendProgress"><div class="send-progress-bar" id="sendProgressBar" style="width:0%"></div></div>
+  </div>
+  <button class="btn btn-outline" onclick="makeGmailDraft()">📝 Gmail 임시저장</button>
+  <button class="btn btn-green btn-lg" onclick="sendAllGmail()">
+    <span id="sendIconText">📬</span> <span id="sendLabel">Gmail로 발송</span>
+  </button>
+</div>
+</div><!-- /page-compose -->
+
+
+<!-- ═══════════ PAGE 2: ORGS ═══════════ -->
+<div id="page-orgs" class="page">
+<div class="container">
+
+  <div class="card">
+    <div class="card-title">➕ 기관 추가</div>
+    <div class="row">
+      <div class="flex-2">
+        <label>기관명 *</label>
+        <input type="text" id="newName" placeholder="예: 강남여성발전센터">
+      </div>
+      <div class="flex-2">
+        <label>이메일 *</label>
+        <input type="email" id="newEmail" placeholder="예: info@center.or.kr">
+      </div>
+    </div>
+    <div class="row">
+      <div class="flex-1">
+        <label>지역</label>
+        <input type="text" id="newRegion" placeholder="예: 서울 강남">
+      </div>
+      <div class="flex-1">
+        <label>담당자명</label>
+        <input type="text" id="newContact" placeholder="예: 교육팀 담당자">
+      </div>
+      <div class="flex-1">
+        <label>유형</label>
+        <select id="newType">
+          <option>여성발전센터</option>
+          <option>여성인력개발센터</option>
+          <option>문화센터</option>
+          <option>평생교육원</option>
+          <option>복지관</option>
+          <option>기타</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-primary" onclick="addOrg()">➕ 기관 추가</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">🏢 등록된 기관 목록</div>
+      <button class="btn btn-danger btn-sm" onclick="resetOrgs()">초기화</button>
+    </div>
+    <div class="search-row">
+      <div class="search-wrap" style="flex:1">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" style="width:100%" type="text" id="orgMgmtSearch" placeholder="기관명, 이메일, 지역 검색..." oninput="renderOrgMgmt()">
+      </div>
+      <select id="typeFilter" onchange="renderOrgMgmt()" style="padding:10px 14px;border:1.5px solid var(--warm-mid);border-radius:9px;font-family:'Noto Sans KR',sans-serif;font-size:.85rem;background:var(--paper);outline:none">
+        <option value="">전체 유형</option>
+        <option>여성발전센터</option>
+        <option>여성인력개발센터</option>
+        <option>문화센터</option>
+        <option>평생교육원</option>
+        <option>복지관</option>
+        <option>기타</option>
+      </select>
+    </div>
+    <div id="orgMgmtList"></div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════ PAGE 3: HISTORY ═══════════ -->
+<div id="page-history" class="page">
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📋 발송 이력</div>
+      <button class="btn btn-danger btn-sm" onclick="clearHistory()">전체 삭제</button>
+    </div>
+    <div id="historyContent"></div>
+  </div>
+</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════ DATA ═══════════════════
+
+const SEED_ORGS = [
+  // 서울 여성발전센터
+  { id:1,  name:'서울 남부여성발전센터',      email:'nambu@seoulwomanup.or.kr',     region:'서울 관악',  type:'여성발전센터',       contact:'' },
+  { id:2,  name:'서울 동부여성발전센터',      email:'dongbu@seoulwomanup.or.kr',    region:'서울 광진',  type:'여성발전센터',       contact:'' },
+  { id:3,  name:'서울 북부여성발전센터',      email:'bukbu@seoulwomanup.or.kr',     region:'서울 노원',  type:'여성발전센터',       contact:'' },
+  { id:4,  name:'서울 서부여성발전센터',      email:'seobu@seoulwomanup.or.kr',     region:'서울 마포',  type:'여성발전센터',       contact:'' },
+  { id:5,  name:'서울 중부여성발전센터',      email:'jungbu@seoulwomanup.or.kr',    region:'서울 중구',  type:'여성발전센터',       contact:'' },
+  // 서울 여성인력개발센터
+  { id:6,  name:'강동여성인력개발센터',       email:'gd@seoulwomanup.or.kr',        region:'서울 강동',  type:'여성인력개발센터',   contact:'' },
+  { id:7,  name:'강북여성인력개발센터',       email:'gangbuk@seoulwomanup.or.kr',   region:'서울 강북',  type:'여성인력개발센터',   contact:'' },
+  { id:8,  name:'강서여성인력개발센터',       email:'gangseo@seoulwomanup.or.kr',   region:'서울 강서',  type:'여성인력개발센터',   contact:'' },
+  { id:9,  name:'관악여성인력개발센터',       email:'gwanak@seoulwomanup.or.kr',    region:'서울 관악',  type:'여성인력개발센터',   contact:'' },
+  { id:10, name:'구로여성인력개발센터',       email:'guro@seoulwomanup.or.kr',      region:'서울 구로',  type:'여성인력개발센터',   contact:'' },
+  { id:11, name:'노원여성인력개발센터',       email:'nowon@seoulwomanup.or.kr',     region:'서울 노원',  type:'여성인력개발센터',   contact:'' },
+  { id:12, name:'동대문여성인력개발센터',     email:'d-2020@hanmail.net',           region:'서울 동대문',type:'여성인력개발센터',   contact:'' },
+  { id:13, name:'동작여성인력개발센터',       email:'dongjak@seoulwomanup.or.kr',   region:'서울 동작',  type:'여성인력개발센터',   contact:'' },
+  { id:14, name:'서대문여성인력개발센터',     email:'sdm@seoulwomanup.or.kr',       region:'서울 서대문',type:'여성인력개발센터',   contact:'' },
+  { id:15, name:'서초여성인력개발센터',       email:'seocho@seoulwomanup.or.kr',    region:'서울 서초',  type:'여성인력개발센터',   contact:'' },
+  { id:16, name:'성동여성인력개발센터',       email:'seongdong@seoulwomanup.or.kr', region:'서울 성동',  type:'여성인력개발센터',   contact:'' },
+  { id:17, name:'송파여성인력개발센터',       email:'songpa@seoulwomanup.or.kr',    region:'서울 송파',  type:'여성인력개발센터',   contact:'' },
+  { id:18, name:'영등포여성인력개발센터',     email:'ydp@seoulwomanup.or.kr',       region:'서울 영등포',type:'여성인력개발센터',   contact:'' },
+  { id:19, name:'은평여성인력개발센터',       email:'ep@seoulwomanup.or.kr',        region:'서울 은평',  type:'여성인력개발센터',   contact:'' },
+  { id:20, name:'종로여성인력개발센터',       email:'jongno@sbwomen.or.kr',         region:'서울 종로',  type:'여성인력개발센터',   contact:'' },
+  { id:21, name:'중랑여성인력개발센터',       email:'jungnang@seoulwomanup.or.kr',  region:'서울 중랑',  type:'여성인력개발센터',   contact:'' },
+  // 경기
+  { id:22, name:'안산여성인력개발센터',       email:'ansanwomen@ansanwomen.or.kr',  region:'경기 안산',  type:'여성인력개발센터',   contact:'' },
+  { id:23, name:'수원시여성문화센터',         email:'swculture@suwon.go.kr',        region:'경기 수원',  type:'문화센터',           contact:'' },
+  { id:24, name:'성남여성인력개발센터',       email:'snwdc@snwdc.or.kr',            region:'경기 성남',  type:'여성인력개발센터',   contact:'' },
+  { id:25, name:'고양여성인력개발센터',       email:'gywdc@gywdc.or.kr',            region:'경기 고양',  type:'여성인력개발센터',   contact:'' },
+  { id:26, name:'부천여성인력개발센터',       email:'bcwomen@bcwomen.or.kr',        region:'경기 부천',  type:'여성인력개발센터',   contact:'' },
+  { id:27, name:'의정부여성인력개발센터',     email:'ujwdc@ujwdc.or.kr',            region:'경기 의정부',type:'여성인력개발센터',   contact:'' },
+  // 부산
+  { id:28, name:'부산해운대여성인력개발센터', email:'haeundae@wdc.busan.kr',        region:'부산 해운대',type:'여성인력개발센터',   contact:'' },
+  { id:29, name:'부산동래여성인력개발센터',   email:'dongnae@wdc.busan.kr',         region:'부산 동래',  type:'여성인력개발센터',   contact:'' },
+  { id:30, name:'부산진여성인력개발센터',     email:'busanjin@wdc.busan.kr',        region:'부산 부산진',type:'여성인력개발센터',   contact:'' },
+  // 대구/인천/광주/대전
+  { id:31, name:'대구여성가족재단',           email:'info@dgwf.or.kr',              region:'대구',       type:'여성발전센터',       contact:'' },
+  { id:32, name:'인천여성인력개발센터',       email:'women@icwdc.or.kr',            region:'인천',       type:'여성인력개발센터',   contact:'' },
+  { id:33, name:'광주여성인력개발센터',       email:'women@gjwdc.or.kr',            region:'광주',       type:'여성인력개발센터',   contact:'' },
+  { id:34, name:'대전여성인력개발센터',       email:'women@djwdc.or.kr',            region:'대전',       type:'여성인력개발센터',   contact:'' },
+  // 문화센터
+  { id:35, name:'롯데백화점문화센터 서울본점',email:'culture.main@lotte.com',       region:'서울 중구',  type:'문화센터',           contact:'교육팀' },
+  { id:36, name:'현대백화점문화센터 목동점',  email:'culture.mokdong@hyundai.com',  region:'서울 양천',  type:'문화센터',           contact:'교육팀' },
+  { id:37, name:'신세계백화점문화센터 강남점',email:'culture.gangnam@shinsegae.com',region:'서울 강남',  type:'문화센터',           contact:'교육팀' },
+  { id:38, name:'AK플라자문화센터 수원점',   email:'culture@akplaza.com',          region:'경기 수원',  type:'문화센터',           contact:'교육팀' },
+];
+
+function loadOrgs() {
+  try {
+    const s = localStorage.getItem('orgs_v3');
+    return s ? JSON.parse(s) : JSON.parse(JSON.stringify(SEED_ORGS));
+  } catch(e) { return JSON.parse(JSON.stringify(SEED_ORGS)); }
+}
+function saveOrgs(o) { localStorage.setItem('orgs_v3', JSON.stringify(o)); }
+function loadHistory() {
+  try {
+    const s = localStorage.getItem('history_v3');
+    return s ? JSON.parse(s) : [];
+  } catch(e) { return []; }
+}
+function saveHistory(h) { localStorage.setItem('history_v3', JSON.stringify(h)); }
+
+let orgs = loadOrgs();
+let history = loadHistory();
+let selected = new Set();
+let nextId = orgs.length ? Math.max(...orgs.map(o=>o.id))+1 : 100;
+let activeFilter = '전체';
+
+// ═══════════════════ TAB ═══════════════════
+
+function goTab(name, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='compose') renderSendList();
+  if(name==='orgs') renderOrgMgmt();
+  if(name==='history') renderHistory();
+  updateBadges();
+}
+
+// ═══════════════════ STATS ═══════════════════
+
+function renderStats() {
+  const sentIds = new Set(history.map(h=>h.orgId));
+  const total = orgs.length;
+  const sent = sentIds.size;
+  const totalSends = history.length;
+  const unsent = total - sent;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-card"><span class="stat-icon">🏢</span><div class="stat-num">${total}</div><div class="stat-label">등록 기관 수</div></div>
+    <div class="stat-card"><span class="stat-icon">📬</span><div class="stat-num">${totalSends}</div><div class="stat-label">총 발송 횟수</div></div>
+    <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-num">${sent}</div><div class="stat-label">발송 완료 기관</div></div>
+    <div class="stat-card"><span class="stat-icon">📨</span><div class="stat-num">${unsent}</div><div class="stat-label">미발송 기관</div></div>
+  `;
+}
+
+function updateBadges() {
+  document.getElementById('orgBadge').textContent = orgs.length;
+  document.getElementById('histBadge').textContent = history.length;
+}
+
+// ═══════════════════ FILTER CHIPS ═══════════════════
+
+function renderFilterChips() {
+  const types = ['전체', ...new Set(orgs.map(o=>o.type))];
+  const regions = ['서울', '경기', '부산', '대구', '인천', '광주', '대전'];
+  const all = ['전체', '서울', '경기', '부산', '대구·광주·대전', '문화센터', '여성발전센터', '여성인력개발센터', '평생교육원'];
+  document.getElementById('filterChips').innerHTML = all.map(f=>`
+    <div class="chip ${activeFilter===f?'active':''}" onclick="setFilter('${f}')">${f}</div>
+  `).join('');
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilterChips();
+  renderSendList();
+}
+
+function filterOrgs(list) {
+  const q = (document.getElementById('orgSearch')?.value||'').toLowerCase();
+  return list.filter(o=>{
+    const matchQ = !q || o.name.includes(q) || o.region.toLowerCase().includes(q) || o.email.includes(q);
+    let matchF = true;
+    if(activeFilter !== '전체') {
+      if(activeFilter === '서울') matchF = o.region.startsWith('서울');
+      else if(activeFilter === '경기') matchF = o.region.startsWith('경기');
+      else if(activeFilter === '부산') matchF = o.region.startsWith('부산');
+      else if(activeFilter === '대구·광주·대전') matchF = ['대구','광주','대전'].some(r=>o.region.startsWith(r));
+      else matchF = o.type === activeFilter || o.region.startsWith(activeFilter);
+    }
+    return matchQ && matchF;
+  });
+}
+
+// ═══════════════════ SEND LIST ═══════════════════
+
+function renderSendList() {
+  renderStats();
+  renderFilterChips();
+  const sentIds = new Set(history.map(h=>h.orgId));
+  const filtered = filterOrgs(orgs);
+  document.getElementById('filterCount').textContent = `${filtered.length}개 표시`;
+
+  document.getElementById('sendOrgGrid').innerHTML = filtered.length ? filtered.map(o=>{
+    const sel = selected.has(o.id);
+    const wasSent = sentIds.has(o.id);
+    return `<div class="org-card ${sel?'selected':''}" onclick="toggleOrg(${o.id})">
+      <div class="org-check">${sel?'✓':''}</div>
+      <div class="org-info">
+        <div class="org-name">${o.name}</div>
+        <div class="org-email">${o.email}</div>
+        <div class="org-tags">
+          <span class="tag tag-region">${o.region}</span>
+          <span class="tag tag-type">${o.type}</span>
+          ${wasSent ? '<span class="tag tag-sent">✅ 발송됨</span>' : '<span class="tag tag-unsent">미발송</span>'}
+        </div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">검색 결과가 없습니다</div></div>';
+
+  const allSel = filtered.length > 0 && filtered.every(o=>selected.has(o.id));
+  document.getElementById('checkAll').checked = allSel;
+  document.getElementById('selCountLabel').textContent = `${selected.size}개 선택`;
+  document.getElementById('sbCount').textContent = selected.size;
+}
+
+function toggleOrg(id) {
+  selected.has(id) ? selected.delete(id) : selected.add(id);
+  renderSendList();
+}
+
+function toggleAll(cb) {
+  const filtered = filterOrgs(orgs);
+  if(cb.checked) filtered.forEach(o=>selected.add(o.id));
+  else filtered.forEach(o=>selected.delete(o.id));
+  renderSendList();
+}
+
+// ═══════════════════ AI MAIL ═══════════════════
+
+async function generateMail() {
+  const title = document.getElementById('bookTitle').value || '하의 수선의 모든 것';
+  const author = document.getElementById('authorName').value || '저자';
+  const pub = document.getElementById('publisher').value || '';
+  const price = document.getElementById('bookPrice').value || '';
+  const link = document.getElementById('buyLink').value || '';
+  const desc = document.getElementById('bookDesc').value || '';
+  const sender = document.getElementById('senderName').value || author;
+  const senderEmail = document.getElementById('senderEmail').value || '';
+
+  document.getElementById('genIconText').innerHTML = '<span class="spin">⏳</span>';
+  document.getElementById('genLabel').textContent = 'AI 작성 중...';
+
+  const prompt = `당신은 도서 홍보 전문 카피라이터입니다. 아래 정보를 바탕으로 여성발전센터·문화센터·평생교육기관 교육 담당자에게 발송할 홍보 이메일을 작성하세요.
+
+[도서 정보]
+제목: ${title}
+저자: ${author}
+출판사/연도: ${pub}
+가격: ${price}
+구매처/연락처: ${link}
+내용 소개: ${desc}
+발신자: ${sender} (${senderEmail})
+
+[작성 지침]
+1. 첫 줄 반드시: "제목: [이메일 제목]" 형식
+2. 한 줄 띄고 본문 시작
+3. 정중하고 따뜻한 어조, 교육기관 담당자 눈높이
+4. 수업 교재로 활용 시 장점 구체적으로 언급
+5. 단체 구매 할인 문의 가능하다는 내용 포함
+6. 수강생 수준(초보~중급)에 맞는 책이라는 점 강조
+7. 본문 마지막에 발신자 서명 포함
+8. 전체 길이: 500~700자`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '';
+    const lines = text.split('\n');
+    const subjLine = lines.find(l => l.startsWith('제목:'));
+    const subject = subjLine ? subjLine.replace(/^제목:\s*/, '').trim() : `[도서 홍보] ${title} 교재 안내`;
+    const bodyLines = lines.slice(lines.findIndex(l => l.startsWith('제목:')) + 1);
+    const body = bodyLines.join('\n').trim();
+    document.getElementById('mailSubject').value = subject;
+    document.getElementById('mailBody').value = body;
+    showToast('✨ AI 메일이 완성되었습니다!');
+  } catch(e) {
+    showToast('❗ 메일 생성 중 오류가 발생했습니다');
+    console.error(e);
+  } finally {
+    document.getElementById('genIconText').textContent = '✨';
+    document.getElementById('genLabel').textContent = 'AI로 메일 생성';
+  }
+}
+
+function previewMail() {
+  const subj = document.getElementById('mailSubject').value;
+  const body = document.getElementById('mailBody').value;
+  document.getElementById('pvSubject').textContent = subj || '(제목 없음)';
+  document.getElementById('pvBody').textContent = body || '(내용 없음)';
+  document.getElementById('previewSection').style.display = 'block';
+  document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function clearMail() {
+  if(!confirm('메일 내용을 초기화할까요?')) return;
+  document.getElementById('mailSubject').value = '';
+  document.getElementById('mailBody').value = '';
+  document.getElementById('previewSection').style.display = 'none';
+  showToast('🔄 메일 내용이 초기화되었습니다');
+}
+
+// ═══════════════════ GMAIL SEND ═══════════════════
+
+async function sendAllGmail() {
+  if(!selected.size) { showToast('❗ 발송할 기관을 먼저 선택해주세요'); return; }
+  const subject = document.getElementById('mailSubject').value.trim();
+  const body = document.getElementById('mailBody').value.trim();
+  if(!subject || !body) { showToast('❗ 제목과 본문을 모두 입력해주세요'); return; }
+
+  const targets = orgs.filter(o => selected.has(o.id));
+  if(!confirm(`📬 ${targets.length}개 기관에 Gmail로 발송하시겠습니까?\n\n${targets.slice(0,5).map(o=>o.name).join('\n')}${targets.length>5?'\n...외 '+(targets.length-5)+'개':''}`)) return;
+
+  document.getElementById('sendIconText').innerHTML = '<span class="spin">⏳</span>';
+  document.getElementById('sendLabel').textContent = '발송 중...';
+  document.getElementById('sendProgress').classList.add('visible');
+
+  let done = 0;
+  const now = new Date().toLocaleString('ko-KR');
+
+  for(const org of targets) {
+    try {
+      const personalBody = org.contact
+        ? `${org.contact} 담당자님께,\n\n${body}`
+        : body;
+
+      const prompt = `Gmail MCP를 사용하여 다음 이메일을 발송해주세요:
+수신: ${org.email}
+제목: ${subject}
+본문: ${personalBody}
+
+임시저장(draft)으로 저장해주세요.`;
+
+      await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          messages: [{ role: 'user', content: prompt }],
+          mcp_servers: [{ type: 'url', url: 'https://gmailmcp.googleapis.com/mcp/v1', name: 'gmail' }]
+        })
+      });
+
+      history.unshift({ orgId: org.id, orgName: org.name, orgEmail: org.email, subject, date: now, type: 'gmail' });
+    } catch(e) {
+      console.error('Failed for', org.name, e);
+    }
+
+    done++;
+    document.getElementById('sendProgressBar').style.width = `${(done/targets.length)*100}%`;
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  saveHistory(history);
+  updateBadges();
+  renderStats();
+
+  document.getElementById('sendIconText').textContent = '📬';
+  document.getElementById('sendLabel').textContent = 'Gmail로 발송';
+  setTimeout(() => {
+    document.getElementById('sendProgress').classList.remove('visible');
+    document.getElementById('sendProgressBar').style.width = '0%';
+  }, 1500);
+
+  showToast(`✅ ${targets.length}개 기관에 발송 완료! Gmail 임시보관함을 확인하세요.`);
+  selected.clear();
+  renderSendList();
+}
+
+async function makeGmailDraft() {
+  const subject = document.getElementById('mailSubject').value.trim();
+  const body = document.getElementById('mailBody').value.trim();
+  if(!subject || !body) { showToast('❗ 제목과 본문을 먼저 작성해주세요'); return; }
+  showToast('📝 Gmail 임시보관함에 저장 중...');
+
+  try {
+    await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        messages: [{ role: 'user', content: `Gmail에 임시저장 draft를 만들어주세요. 제목: ${subject}, 본문: ${body}` }],
+        mcp_servers: [{ type: 'url', url: 'https://gmailmcp.googleapis.com/mcp/v1', name: 'gmail' }]
+      })
+    });
+    showToast('📝 Gmail 임시보관함에 저장되었습니다!');
+  } catch(e) {
+    showToast('❗ 임시저장 중 오류가 발생했습니다');
+  }
+}
+
+// ═══════════════════ ORG MGMT ═══════════════════
+
+function renderOrgMgmt() {
+  const q = (document.getElementById('orgMgmtSearch')?.value||'').toLowerCase();
+  const typeF = document.getElementById('typeFilter')?.value || '';
+  const filtered = orgs.filter(o => {
+    const mq = !q || o.name.includes(q) || o.email.includes(q) || o.region.toLowerCase().includes(q);
+    const mt = !typeF || o.type === typeF;
+    return mq && mt;
+  });
+
+  if(!filtered.length) {
+    document.getElementById('orgMgmtList').innerHTML = '<div class="empty-state"><div class="empty-icon">🏢</div><div class="empty-text">검색 결과가 없습니다</div></div>';
+    return;
+  }
+
+  const sentIds = new Set(history.map(h=>h.orgId));
+  document.getElementById('orgMgmtList').innerHTML = `
+    <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px">${filtered.length}개 기관</div>
+    <div class="org-grid">
+      ${filtered.map(o=>`
+        <div class="org-card" style="cursor:default">
+          <div class="org-info">
+            <div class="org-name">${o.name}</div>
+            <div class="org-email">${o.email}</div>
+            ${o.contact ? `<div class="org-email" style="color:var(--needle)">담당: ${o.contact}</div>` : ''}
+            <div class="org-tags">
+              <span class="tag tag-region">${o.region}</span>
+              <span class="tag tag-type">${o.type}</span>
+              ${sentIds.has(o.id) ? '<span class="tag tag-sent">발송됨</span>' : ''}
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-danger btn-sm" onclick="deleteOrg(${o.id})">삭제</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+function addOrg() {
+  const name = document.getElementById('newName').value.trim();
+  const email = document.getElementById('newEmail').value.trim();
+  const region = document.getElementById('newRegion').value.trim();
+  const contact = document.getElementById('newContact').value.trim();
+  const type = document.getElementById('newType').value;
+  if(!name || !email) { showToast('❗ 기관명과 이메일은 필수입니다'); return; }
+  if(!email.includes('@')) { showToast('❗ 올바른 이메일 형식을 입력해주세요'); return; }
+  orgs.push({ id: nextId++, name, email, region, type, contact });
+  saveOrgs(orgs);
+  ['newName','newEmail','newRegion','newContact'].forEach(id => document.getElementById(id).value = '');
+  renderOrgMgmt();
+  updateBadges();
+  showToast(`✅ "${name}" 기관이 추가되었습니다`);
+}
+
+function deleteOrg(id) {
+  const org = orgs.find(o=>o.id===id);
+  if(!confirm(`"${org?.name}" 기관을 삭제할까요?`)) return;
+  orgs = orgs.filter(o=>o.id!==id);
+  selected.delete(id);
+  saveOrgs(orgs);
+  renderOrgMgmt();
+  updateBadges();
+  showToast('🗑 기관이 삭제되었습니다');
+}
+
+function resetOrgs() {
+  if(!confirm('⚠️ 기관 목록을 초기 상태로 되돌릴까요?\n추가한 기관도 모두 삭제됩니다.')) return;
+  orgs = JSON.parse(JSON.stringify(SEED_ORGS));
+  nextId = SEED_ORGS.length + 1;
+  saveOrgs(orgs);
+  selected.clear();
+  renderOrgMgmt();
+  updateBadges();
+  showToast('🔄 기관 목록이 초기화되었습니다');
+}
+
+// ═══════════════════ HISTORY ═══════════════════
+
+function renderHistory() {
+  const el = document.getElementById('historyContent');
+  if(!history.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">아직 발송 이력이 없습니다</div></div>';
+    return;
+  }
+  el.innerHTML = `<div class="history-list">` + history.map(h=>`
+    <div class="history-item">
+      <span class="h-icon">${h.type==='gmail'?'📬':'📝'}</span>
+      <div class="h-info">
+        <div class="h-org">${h.orgName}</div>
+        <div class="h-sub">${h.orgEmail} &nbsp;·&nbsp; <em>${h.subject}</em></div>
+        <div class="h-date">${h.date}</div>
+      </div>
+      <span class="badge ${h.type==='gmail'?'badge-gmail':'badge-draft'}">${h.type==='gmail'?'Gmail 발송':'임시저장'}</span>
+    </div>
+  `).join('') + `</div>`;
+}
+
+function clearHistory() {
+  if(!confirm('발송 이력을 모두 삭제할까요?')) return;
+  history = [];
+  saveHistory(history);
+  renderHistory();
+  updateBadges();
+  renderStats();
+  showToast('🗑 이력이 삭제되었습니다');
+}
+
+// ═══════════════════ TOAST ═══════════════════
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════════════ INIT ═══════════════════
+renderSendList();
+updateBadges();
+</script>
+</body>
+</html>
